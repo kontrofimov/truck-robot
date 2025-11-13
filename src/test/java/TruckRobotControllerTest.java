@@ -147,6 +147,38 @@ public class TruckRobotControllerTest {
     }
 
     @Test
+    public void testProcessCommands_place_invalid_location3() throws Exception {
+        String commandString = "PLACE 1,5,WEST REPORT";
+        String expected = "Not placed.";
+
+        List<String> commands = CommandParser.getCommandList(commandString);
+        String[] args = CommandParser.getPlaceCmdArgs(commandString);
+
+        when(truckRobotService.processCommands(commands, args)).thenReturn(expected);
+        ResponseEntity<String> response = truckRobotController.command(commandString);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(expected, response.getBody());
+    }
+
+    @Test
+    public void testProcessCommands_place_invalid_location4() throws Exception {
+        String commandString = "PLACE 1,-1,WEST REPORT";
+        String expected = "Not placed.";
+
+        List<String> commands = CommandParser.getCommandList(commandString);
+        String[] args = CommandParser.getPlaceCmdArgs(commandString);
+
+        when(truckRobotService.processCommands(commands, args)).thenReturn(expected);
+        ResponseEntity<String> response = truckRobotController.command(commandString);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(expected, response.getBody());
+    }
+
+    @Test
     public void testProcessCommands_rotate_left() throws Exception {
         String commandString = "PLACE 3,2,WEST LEFT LEFT LEFT LEFT";
         String expected = "3,2,WEST";
@@ -166,6 +198,38 @@ public class TruckRobotControllerTest {
     public void testProcessCommands_rotate_right() throws Exception {
         String commandString = "PLACE 3,2,WEST RIGHT RIGHT RIGHT RIGHT";
         String expected = "3,2,WEST";
+
+        List<String> commands = CommandParser.getCommandList(commandString);
+        String[] args = CommandParser.getPlaceCmdArgs(commandString);
+
+        when(truckRobotService.processCommands(commands, args)).thenReturn(expected);
+        ResponseEntity<String> response = truckRobotController.command(commandString);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(expected, response.getBody());
+    }
+
+    @Test
+    public void testProcessCommands_not_placed_ignored_command() throws Exception {
+        String commandString = "PLACE 1,-1,NORTH MOVE";
+        String expected = "Not placed.";
+
+        List<String> commands = CommandParser.getCommandList(commandString);
+        String[] args = CommandParser.getPlaceCmdArgs(commandString);
+
+        when(truckRobotService.processCommands(commands, args)).thenReturn(expected);
+        ResponseEntity<String> response = truckRobotController.command(commandString);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(expected, response.getBody());
+    }
+
+    @Test
+    public void testProcessCommands_not_placed_ignored_command2() throws Exception {
+        String commandString = "MOVE REPORT";
+        String expected = "Not placed.";
 
         List<String> commands = CommandParser.getCommandList(commandString);
         String[] args = CommandParser.getPlaceCmdArgs(commandString);
