@@ -1,7 +1,7 @@
 # Truck Robot API 
 
 ### 1. Prerequisites
-#### Install Java 21 and set JAVA_HOME on Windows     
+#### Install Java 21 and set JAVA_HOME     
 #### Run command to check Java version:
     java -version
 
