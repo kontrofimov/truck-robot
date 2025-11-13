@@ -1,7 +1,5 @@
 package com.robot.utils;
 import com.robot.model.CommandEnum;
-import com.robot.model.Direction;
-
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,11 +10,6 @@ public class CommandParser {
 
     private static final Set<String> VALID_COMMANDS =
             Arrays.stream(CommandEnum.values())
-                    .map(Enum::name)
-                    .collect(Collectors.toSet());
-
-    private static final Set<String> VALID_DIRECTIONS =
-            Arrays.stream(Direction.values())
                     .map(Enum::name)
                     .collect(Collectors.toSet());
 
@@ -40,31 +33,25 @@ public class CommandParser {
         String[] args = null;
         String placeCmd = CommandEnum.PLACE.toString();
 
-        try {
-            if (commandString.contains(placeCmd)) {
-                //find the exact substring with args after PLACE cmd
-                int placeCmdStartIndex = commandString.indexOf(placeCmd);
-                int placeCmdEndIndex = placeCmdStartIndex + placeCmd.length();
+        if (commandString.contains(placeCmd)) {
+            //find the exact substring with args after PLACE cmd
+            int placeCmdStartIndex = commandString.indexOf(placeCmd);
+            int placeCmdEndIndex = placeCmdStartIndex + placeCmd.length();
 
-                String commandStrSub = commandString.substring(placeCmdEndIndex);
+            String commandStrSub = commandString.substring(placeCmdEndIndex);
 
-                Scanner sc = new Scanner(commandStrSub);
-                sc.useDelimiter(" ");
+            Scanner sc = new Scanner(commandStrSub);
+            sc.useDelimiter(" ");
 
-                if (sc.hasNext()) {
-                    // check if the arguments for PLACE command are valid
-                    String argsRegexPattern = "^(\\d+),(\\d+),([A-Z]+)$";
-                    Pattern p = Pattern.compile(argsRegexPattern);
-                    Matcher m = p.matcher(sc.next());
-                    String placeDirection = m.group(3).toUpperCase();
-                    if (m.matches() && VALID_DIRECTIONS.contains(placeDirection)) {
-                        args = new String[]{ m.group(1), m.group(2), placeDirection };
-                    }
+            if (sc.hasNext()) {
+                // check if the arguments for PLACE command are valid
+                String argsRegexPattern = "^(\\d+),(\\d+),([A-Z]+)$";
+                Pattern p = Pattern.compile(argsRegexPattern);
+                Matcher m = p.matcher(sc.next());
+                if (m.matches()) {
+                    args = new String[]{m.group(1), m.group(2), m.group(3).toUpperCase()};
                 }
             }
-        }
-        catch (Exception e) {
-            System.out.println("Error in getPlaceCmdArgs: " + e.getMessage());
         }
         return args;
     }
