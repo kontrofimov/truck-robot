@@ -10,8 +10,8 @@ public class Table {
     }
 
     public boolean isValidPosition(Position position) {
-        return ((position.getX() >= 0 && position.getX() <= width)
-                && (position.getY() >= 0 && position.getY() <= height));
+        return ((position.getX() >= 0 && position.getX() < width)
+                && (position.getY() >= 0 && position.getY() < height));
     }
 
 }
