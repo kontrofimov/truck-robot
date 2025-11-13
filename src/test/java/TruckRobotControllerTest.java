@@ -338,4 +338,20 @@ public class TruckRobotControllerTest {
         assertEquals(expected, response.getBody());
     }
 
+    @Test
+    public void testProcessCommands_invalid_place_dir1() throws Exception {
+        String commandString = "PLACE 3,3,W M0VE REPORT";
+        String expected = "Not placed.";
+
+        List<String> commands = CommandParser.getCommandList(commandString);
+        String[] args = CommandParser.getPlaceCmdArgs(commandString);
+
+        when(truckRobotService.processCommands(commands, args)).thenReturn(expected);
+        ResponseEntity<String> response = truckRobotController.command(commandString);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(expected, response.getBody());
+    }
+
 }

@@ -1,5 +1,7 @@
 package com.robot.utils;
 import com.robot.model.CommandEnum;
+import com.robot.model.Direction;
+
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -10,6 +12,11 @@ public class CommandParser {
 
     private static final Set<String> VALID_COMMANDS =
             Arrays.stream(CommandEnum.values())
+                    .map(Enum::name)
+                    .collect(Collectors.toSet());
+
+    private static final Set<String> VALID_DIRECTIONS =
+            Arrays.stream(Direction.values())
                     .map(Enum::name)
                     .collect(Collectors.toSet());
 
@@ -49,7 +56,9 @@ public class CommandParser {
                 Pattern p = Pattern.compile(argsRegexPattern);
                 Matcher m = p.matcher(sc.next());
                 if (m.matches()) {
-                    args = new String[]{m.group(1), m.group(2), m.group(3).toUpperCase()};
+                    if (VALID_DIRECTIONS.contains(m.group(3).toUpperCase())) {
+                        args = new String[]{m.group(1), m.group(2), m.group(3).toUpperCase()};
+                    }
                 }
             }
         }
