@@ -44,5 +44,5 @@ The application meets the following requirements:
     Any move that would cause the robot to fall must be ignored.
     It is not required to provide any graphical output showing the movement of the truck robot.
 
-### 5. Testing
+### 4. Testing
 #### Functionality is covered with unit testing, the test cases can be found in `TruckRobotControllerTest`
