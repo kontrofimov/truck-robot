@@ -1,10 +1,8 @@
 package com.robot.service;
 
-import com.robot.model.Direction;
-import com.robot.model.Position;
-import com.robot.model.Robot;
-import com.robot.model.Table;
+import com.robot.model.*;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 
 @Service
@@ -17,48 +15,59 @@ public class TruckRobotService {
         this.table = new Table(5, 5);
     }
 
-    public String place(int x, int y, Direction direction) {
+    public String processCommands (List<String> commands, String[] args) {
+
+        String result = "";
+        for (String command : commands) {
+            switch (CommandEnum.valueOf(command)) {
+                case PLACE:
+                    if (args != null && args.length > 0) {
+                        place(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Direction.valueOf(args[2]));
+                    }
+                    break;
+                case MOVE:
+                    move();
+                    break;
+                case LEFT:
+                    turnLeft();
+                    break;
+                case RIGHT:
+                    turnRight();
+                    break;
+                case REPORT:
+                    result = report();
+                    break;
+            }
+        };
+        return result;
+    }
+
+    private void place(int x, int y, Direction direction) {
         Position position = new Position(x, y);
-
         if (table.isValidPosition(position)) {
-            return "Invalid position.";
+            robot.place(position, direction);
         }
-
-        robot.place(position, direction);
-        return "Placed at " + x + "," + y + "," + direction;
     }
 
-    public String move() {
-        if (!robot.isPlaced()) {
-            return "Not placed.";
+    private void move() {
+        if (robot.isPlaced()) {
+            Position newPosition = robot.getPosition().move(robot.getDirection());
+            if (table.isValidPosition(newPosition)) {
+                robot.move();
+            }
         }
-
-        Position newPosition = robot.getPosition().move(robot.getDirection());
-
-        if (table.isValidPosition(newPosition)) {
-            return "Move ignored.";
-        }
-
-        robot.move();
-        return "Moved to " + robot.getPosition().getX() + "," + robot.getPosition().getY();
     }
 
-    public String turnLeft() {
-        if (!robot.isPlaced()) {
-            return "Not placed.";
+    private void turnLeft() {
+        if (robot.isPlaced()) {
+            robot.turnLeft();
         }
-
-        robot.turnLeft();
-        return "Facing: " + robot.getDirection();
     }
 
-    public String turnRight() {
-        if (!robot.isPlaced()) {
-            return "Not placed.";
+    private void turnRight() {
+        if (robot.isPlaced()) {
+            robot.turnRight();
         }
-
-        robot.turnRight();
-        return "Facing: " + robot.getDirection();
     }
 
     public String report() {

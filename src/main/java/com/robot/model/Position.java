@@ -17,14 +17,6 @@ public class Position {
         return y;
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
     public Position move(Direction direction) {
         int newX = getX();
         int newY = getY();
