@@ -242,6 +242,100 @@ public class TruckRobotControllerTest {
         assertEquals(expected, response.getBody());
     }
 
+    @Test
+    public void testProcessCommands_command_args_lower_case() throws Exception {
+        String commandString = "place 0,1,north REPORT";
+        String expected = "Not placed.";
 
+        List<String> commands = CommandParser.getCommandList(commandString);
+        String[] args = CommandParser.getPlaceCmdArgs(commandString);
+
+        when(truckRobotService.processCommands(commands, args)).thenReturn(expected);
+        ResponseEntity<String> response = truckRobotController.command(commandString);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(expected, response.getBody());
+    }
+
+    @Test
+    public void testProcessCommands_command_args_extra_space() throws Exception {
+        String commandString = "PLACE  0,1,EAST REPORT"; //args for PLACE command aren't recognised due to the extra space as expected
+        String expected = "Not placed.";
+
+        List<String> commands = CommandParser.getCommandList(commandString);
+        String[] args = CommandParser.getPlaceCmdArgs(commandString);
+
+        when(truckRobotService.processCommands(commands, args)).thenReturn(expected);
+        ResponseEntity<String> response = truckRobotController.command(commandString);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(expected, response.getBody());
+    }
+
+    @Test
+    public void testProcessCommands_command_args_incorrect_order() throws Exception {
+        String commandString = "0,1,EAST PLACE REPORT";
+        String expected = "Not placed.";
+
+        List<String> commands = CommandParser.getCommandList(commandString);
+        String[] args = CommandParser.getPlaceCmdArgs(commandString);
+
+        when(truckRobotService.processCommands(commands, args)).thenReturn(expected);
+        ResponseEntity<String> response = truckRobotController.command(commandString);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(expected, response.getBody());
+    }
+
+    @Test
+    public void testProcessCommands_command_args_incorrect_args() throws Exception {
+        String commandString = "PLACE  3,3, WEST REPORT";
+        String expected = "Not placed.";
+
+        List<String> commands = CommandParser.getCommandList(commandString);
+        String[] args = CommandParser.getPlaceCmdArgs(commandString);
+
+        when(truckRobotService.processCommands(commands, args)).thenReturn(expected);
+        ResponseEntity<String> response = truckRobotController.command(commandString);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(expected, response.getBody());
+    }
+
+    @Test
+    public void testProcessCommands_command_args_incorrect_args2() throws Exception {
+        String commandString = "PLACE 3, 3 ,WEST REPORT";
+        String expected = "Not placed.";
+
+        List<String> commands = CommandParser.getCommandList(commandString);
+        String[] args = CommandParser.getPlaceCmdArgs(commandString);
+
+        when(truckRobotService.processCommands(commands, args)).thenReturn(expected);
+        ResponseEntity<String> response = truckRobotController.command(commandString);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(expected, response.getBody());
+    }
+
+    @Test
+    public void testProcessCommands_invalid_command() throws Exception {
+        String commandString = "PLACE 3,3,WEST TURNLEFT ,M0VE REPORT";
+        String expected = "3,3,WEST";
+
+        List<String> commands = CommandParser.getCommandList(commandString);
+        String[] args = CommandParser.getPlaceCmdArgs(commandString);
+
+        when(truckRobotService.processCommands(commands, args)).thenReturn(expected);
+        ResponseEntity<String> response = truckRobotController.command(commandString);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(expected, response.getBody());
+    }
 
 }

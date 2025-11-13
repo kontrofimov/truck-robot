@@ -12,7 +12,7 @@
 ### 2. REST API endpoint
     POST /api/robot/command
     
-#### Supported Commands should be included in the request body as 'Content-Type: text/plain':
+#### The supported commands must be included in the request body as 'Content-Type: text/plain', any other commands are ignored.
     PLACE X,Y,F
     MOVE
     LEFT
@@ -24,13 +24,13 @@
     0 <= Y <= 4
     F for NORTH, SOUTH, EAST or WEST.
      
-#### Example Requests:
+#### Example Request:
 
     curl --location 'http://localhost:8080/api/robot/command' \
     --header 'Content-Type: text/plain' \
     --data 'PLACE 0,0,NORTH MOVE RIGHT MOVE REPORT'
 
-#### Example Respone:
+#### Example Response:
     1,1,EAST
 
 ### 3. Specifications:
@@ -45,4 +45,4 @@ The application meets the following requirements:
     It is not required to provide any graphical output showing the movement of the truck robot.
 
 ### 5. Testing
-#### Functionality is covered with unit testing, test cases can be found in `TruckRobotControllerTest`
+#### Functionality is covered with unit testing, the test cases can be found in `TruckRobotControllerTest`

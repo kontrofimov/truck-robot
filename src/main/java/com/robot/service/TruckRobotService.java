@@ -21,7 +21,7 @@ public class TruckRobotService {
         for (String command : commands) {
             switch (CommandEnum.valueOf(command)) {
                 case PLACE:
-                    if (args != null && args.length > 0) {
+                    if (args != null && args.length == 3) {
                         place(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Direction.valueOf(args[2]));
                     }
                     break;
