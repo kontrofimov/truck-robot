@@ -39,10 +39,10 @@ public class CommandParser {
                 String next = sc.next();
                 // check if the arguments for PLACE command are valid
                 String argsRegexPattern = "^(\\d+),(\\d+),([A-Z]+)$";
-                Pattern p = Pattern.compile(argsRegexPattern);
+                Pattern p = Pattern.compile(argsRegexPattern, Pattern.CASE_INSENSITIVE);
                 Matcher m = p.matcher(next);
                 if (m.matches()) {
-                    args = new String[]{m.group(1), m.group(2), m.group(3)};
+                    args = new String[]{m.group(1), m.group(2), m.group(3).toUpperCase()};
                 }
             }
         } else {
